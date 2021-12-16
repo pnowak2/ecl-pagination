@@ -2,11 +2,11 @@ import { Paginator } from "../src/paginator";
 
 describe("Pagination", () => {
     describe("Initialization", () => {
-        describe("Initialization", () => {
+        describe("Valid", () => {
             it("should init without config", () => {
                 const paginator = Paginator.create();
 
-                expect(paginator.getTotalItems()).toBe(10);
+                expect(paginator.getTotalItems()).toBe(0);
                 expect(paginator.getPageSize()).toBe(10);
                 expect(paginator.getCurrentPage()).toBe(1);
                 expect(paginator.getPageWindowSize()).toBe(5);
@@ -36,7 +36,7 @@ describe("Pagination", () => {
             });
         });
 
-        describe("Invalid Initialization", () => {
+        describe("Invalid", () => {
             it("should not accept negative total items", () => {
                 expect(() => {
                     Paginator.create({
