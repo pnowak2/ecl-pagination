@@ -80,14 +80,66 @@ describe("Pagination", () => {
     });
 
     describe("API", () => {
+        describe("hasItems()", () => {
+            it("should return true if any items", () => {
+                const paginator = Paginator.create({
+                    totalItems: 10,
+                });
+
+                expect(paginator.hasItems()).toBe(true);
+            });
+
+            it("should return false if no items", () => {
+                const paginator = Paginator.create({
+                    totalItems: 0,
+                });
+
+                expect(paginator.hasItems()).toBe(false);
+            });
+        });
+
+        describe("getFirstPage()", () => {
+            it("should return 1", () => {
+                const paginator = Paginator.create({
+                    totalItems: 10,
+                    pageSize: 10,
+                });
+
+                expect(paginator.getFirstPage()).toBe(1);
+            });
+        });
+
+        describe("getLastPage()", () => {
+            it("should return last valid page", () => {
+                const paginator = Paginator.create({
+                    totalItems: 100,
+                    pageSize: 10,
+                    currentPage: 1,
+                    pageWindowSize: 5
+                });
+
+                expect(paginator.getLastPage()).toBe(10);
+            });
+        });
+
         describe("getPagesCount()", () => {
             it("should provide many pages", () => {
-                const paginator = Paginator.create({
+                const paginator11 = Paginator.create({
+                    totalItems: 11,
+                    pageSize: 10,
+                });
+                const paginator25 = Paginator.create({
+                    totalItems: 25,
+                    pageSize: 10,
+                });
+                const paginator100 = Paginator.create({
                     totalItems: 100,
                     pageSize: 10,
                 });
 
-                expect(paginator.getPagesCount()).toEqual(10);
+                expect(paginator11.getPagesCount()).toEqual(2);
+                expect(paginator25.getPagesCount()).toEqual(3);
+                expect(paginator100.getPagesCount()).toEqual(10);
             });
 
             it("should provide one page", () => {

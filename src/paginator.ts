@@ -41,6 +41,18 @@ export class Paginator {
         );
     }
 
+    getFirstPage(): number {
+        return 1;
+    }
+
+    getLastPage(): number {
+        return this.getPagesCount();
+    }
+
+    hasItems(): boolean {
+        return this.getTotalItems() > 0;
+    }
+
     getPagesCount(): number {
         const pagesCount = Math.ceil(this.totalItems / this.pageSize);
         return Math.max(pagesCount, 1);
