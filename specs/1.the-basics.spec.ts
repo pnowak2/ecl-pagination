@@ -44,6 +44,7 @@ describe("Pagination", () => {
                     });
                 }).toThrow('total items cannot be negative');
             });
+
             it("should not accept negative page size", () => {
                 expect(() => {
                     Paginator.create({
@@ -59,19 +60,56 @@ describe("Pagination", () => {
                     });
                 }).toThrow('page size must be bigger than zero');
             });
+
+            it("should not accept negative page window size", () => {
+                expect(() => {
+                    Paginator.create({
+                        pageWindowSize: -1
+                    });
+                }).toThrow('page window size must be bigger than zero');
+            });
+
+            it("should not accept zero page window size", () => {
+                expect(() => {
+                    Paginator.create({
+                        pageWindowSize: 0
+                    });
+                }).toThrow('page window size must be bigger than zero');
+            });
         });
     });
 
     describe("API", () => {
-        describe(".getPagedWindow()", () => {
-            const paginator = Paginator.create({
-                totalItems: 100,
-                pageSize: 10,
-                currentPage: 1,
-                pageWindowSize: 5
+        describe("getPagesCount()", () => {
+            it("should provide many pages", () => {
+                const paginator = Paginator.create({
+                    totalItems: 100,
+                    pageSize: 10,
+                });
+
+                expect(paginator.getPagesCount()).toEqual(10);
             });
 
-            expect(paginator.getPageWindow()).toEqual([1, 2, 3, 4, 5]);
+            it("should provide one page", () => {
+                const paginator = Paginator.create({
+                    totalItems: 5,
+                    pageSize: 10,
+                });
+
+                expect(paginator.getPagesCount()).toEqual(1);
+            });
+        });
+        describe("getPagedWindow()", () => {
+            it("should provide..", () => {
+                const paginator = Paginator.create({
+                    totalItems: 100,
+                    pageSize: 10,
+                    currentPage: 1,
+                    pageWindowSize: 5
+                });
+
+                expect(paginator.getPageWindow()).toEqual([1, 2, 3, 4, 5]);
+            });
         });
     });
 });

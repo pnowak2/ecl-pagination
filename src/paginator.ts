@@ -28,6 +28,10 @@ export class Paginator {
         if (config.pageSize <= 0) {
             throw new Error('page size must be bigger than zero');
         }
+        
+        if (config.pageWindowSize <= 0) {
+            throw new Error('page window size must be bigger than zero');
+        }
 
         return new Paginator(
             config.totalItems,
@@ -35,6 +39,11 @@ export class Paginator {
             config.currentPage,
             config.pageWindowSize
         );
+    }
+
+    getPagesCount(): number {
+        const pagesCount = Math.ceil(this.totalItems / this.pageSize);
+        return Math.max(pagesCount, 1);
     }
 
     getPageWindow(): Array<number> {
