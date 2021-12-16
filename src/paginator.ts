@@ -66,7 +66,7 @@ export class Paginator {
         return Math.max(pagesCount, 1);
     }
 
-    getPageWindow(): Array<number> {
+    getPages(): Array<number> {
         const pageWindowSize = this.getPageWindowSize();
         const pagesCount = this.getPagesCount();
         const currentPage = this.getCurrentPage();

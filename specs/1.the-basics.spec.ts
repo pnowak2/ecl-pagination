@@ -216,11 +216,11 @@ describe("Pagination", () => {
                         pageWindowSize: 5
                     });
 
-                    expect(paginator.getPageWindow()).toEqual([1, 2, 3, 4, 5]);
+                    expect(paginator.getPages()).toEqual([1, 2, 3, 4, 5]);
                     paginator.nextPage();
-                    expect(paginator.getPageWindow()).toEqual([1, 2, 3, 4, 5]);
+                    expect(paginator.getPages()).toEqual([1, 2, 3, 4, 5]);
                     paginator.nextPage();
-                    expect(paginator.getPageWindow()).toEqual([1, 2, 3, 4, 5]);
+                    expect(paginator.getPages()).toEqual([1, 2, 3, 4, 5]);
                 });
 
                 it("should move after first items", () => {
@@ -231,13 +231,13 @@ describe("Pagination", () => {
                         pageWindowSize: 5
                     });
 
-                    expect(paginator.getPageWindow()).toEqual([2, 3, 4, 5, 6]);
+                    expect(paginator.getPages()).toEqual([2, 3, 4, 5, 6]);
                     paginator.nextPage();
-                    expect(paginator.getPageWindow()).toEqual([3, 4, 5, 6, 7]);
+                    expect(paginator.getPages()).toEqual([3, 4, 5, 6, 7]);
                     paginator.nextPage();
-                    expect(paginator.getPageWindow()).toEqual([4, 5, 6, 7, 8]);
+                    expect(paginator.getPages()).toEqual([4, 5, 6, 7, 8]);
                     paginator.nextPage();
-                    expect(paginator.getPageWindow()).toEqual([5, 6, 7, 8, 9]);
+                    expect(paginator.getPages()).toEqual([5, 6, 7, 8, 9]);
                 });
 
                 it("should not move after last items", () => {
@@ -248,11 +248,11 @@ describe("Pagination", () => {
                         pageWindowSize: 5
                     });
 
-                    expect(paginator.getPageWindow()).toEqual([6, 7, 8, 9, 10]);
+                    expect(paginator.getPages()).toEqual([6, 7, 8, 9, 10]);
                     paginator.nextPage();
-                    expect(paginator.getPageWindow()).toEqual([6, 7, 8, 9, 10]);
+                    expect(paginator.getPages()).toEqual([6, 7, 8, 9, 10]);
                     paginator.nextPage();
-                    expect(paginator.getPageWindow()).toEqual([6, 7, 8, 9, 10]);
+                    expect(paginator.getPages()).toEqual([6, 7, 8, 9, 10]);
                 });
             });
         });
