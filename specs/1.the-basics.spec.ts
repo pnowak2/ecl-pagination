@@ -98,6 +98,50 @@ describe("Pagination", () => {
             });
         });
 
+        describe("isFirstPageActive()", () => {
+            it("should return true if yes", () => {
+                const paginator = Paginator.create({
+                    totalItems: 100,
+                    pageSize: 10,
+                    currentPage: 1
+                });
+
+                expect(paginator.isFirstPageActive()).toBe(true);
+            });
+
+            it("should return false if no", () => {
+                const paginator = Paginator.create({
+                    totalItems: 100,
+                    pageSize: 10,
+                    currentPage: 2
+                });
+
+                expect(paginator.isFirstPageActive()).toBe(false);
+            });
+        });
+
+        describe("isLastPageActive()", () => {
+            it("should return true if yes", () => {
+                const paginator = Paginator.create({
+                    totalItems: 100,
+                    pageSize: 10,
+                    currentPage: 10
+                });
+
+                expect(paginator.isLastPageActive()).toBe(true);
+            });
+
+            it("should return false if no", () => {
+                const paginator = Paginator.create({
+                    totalItems: 100,
+                    pageSize: 10,
+                    currentPage: 9
+                });
+
+                expect(paginator.isLastPageActive()).toBe(false);
+            });
+        });
+
         describe("getFirstPage()", () => {
             it("should return 1", () => {
                 const paginator = Paginator.create({

@@ -49,6 +49,14 @@ export class Paginator {
         return this.getPagesCount();
     }
 
+    isFirstPageActive(): boolean {
+        return this.getCurrentPage() === 1;
+    }
+
+    isLastPageActive(): boolean {
+        return this.getCurrentPage() === this.getPagesCount();
+    }
+
     hasItems(): boolean {
         return this.getTotalItems() > 0;
     }
