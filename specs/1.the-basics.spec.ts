@@ -247,5 +247,35 @@ describe("Pagination", () => {
                 });
             });
         });
+
+        describe("setCurrentPage()", () => {
+            it("should ..", () => {
+                const paginator1 = Paginator.create({
+                    totalItems: 100,
+                    pageSize: 10,
+                    currentPage: 1,
+                    pageWindowSize: 5
+                });
+
+                paginator1.setCurrentPage(2);
+
+                expect(paginator1.getCurrentPage()).toBe(2);
+            });
+        });
+
+        describe("nextPage()", () => {
+            it("should..", () => {
+                const paginator1 = Paginator.create({
+                    totalItems: 100,
+                    pageSize: 10,
+                    currentPage: 3,
+                    pageWindowSize: 5
+                });
+
+                expect(paginator1.getPageWindow()).toEqual([1, 2, 3, 4, 5]);
+                paginator1.nextPage();
+                expect(paginator1.getPageWindow()).toEqual([2, 3, 4, 5, 6]);
+            });
+        });
     });
 });

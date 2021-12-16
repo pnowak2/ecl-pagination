@@ -97,6 +97,21 @@ export class Paginator {
         return this.range(startPage, endPage + 1);
     }
 
+    setCurrentPage(page: number): void {
+      var pagesCount, upperTrunc, truncated;
+
+      pagesCount = this.getPagesCount();
+      upperTrunc = Math.min(...[page, pagesCount]);
+      truncated = Math.max(...[upperTrunc, 1]);
+
+      this.currentPage = truncated;
+    }
+
+    nextPage(): void {
+        const nextPage = this.getCurrentPage() + 1;
+        this.setCurrentPage(nextPage);
+    }
+
     getTotalItems(): number {
         return this.totalItems;
     }
