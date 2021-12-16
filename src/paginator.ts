@@ -153,7 +153,6 @@ export class Paginator {
         this.pageWindowSize = truncated;
     }
 
-
     private range(start: number, end: number, step: number = 1): Array<number> {
         let output = [];
         if (typeof end === 'undefined') {
