@@ -62,6 +62,7 @@ export class Paginator {
         const pageWindowSize = this.getPageWindowSize();
         const pagesCount = this.getPagesCount();
         const currentPage = this.getCurrentPage();
+
         let truncatedPageWindowSize;
         let leftPageWindowSize;
         let rightPageWindowSize;
@@ -107,9 +108,23 @@ export class Paginator {
       this.currentPage = truncated;
     }
 
+    firstPage(): void {
+        this.setCurrentPage(1);
+    }
+
+    lastPage(): void {
+        const lastPage = this.getPagesCount();
+        this.setCurrentPage(lastPage);
+    }
+
     nextPage(): void {
         const nextPage = this.getCurrentPage() + 1;
         this.setCurrentPage(nextPage);
+    }
+
+    previousPage(): void {
+        const previousPage = this.getCurrentPage() - 1;
+        this.setCurrentPage(previousPage);
     }
 
     getTotalItems(): number {
@@ -120,6 +135,11 @@ export class Paginator {
         return this.pageSize;
     }
 
+    setPageSize(size: number): void {
+        const truncated = Math.max(...[size, 1]);
+        this.pageSize = truncated;
+    }
+
     getCurrentPage(): number {
         return this.currentPage;
     }
@@ -127,6 +147,12 @@ export class Paginator {
     getPageWindowSize(): number {
         return this.pageWindowSize;
     }
+
+    setPageWindowSize(size: number): void {
+        const truncated = Math.max(...[size, 1]);
+        this.pageWindowSize = truncated;
+    }
+
 
     private range(start: number, end: number, step: number = 1): Array<number> {
         let output = [];

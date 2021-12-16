@@ -165,91 +165,56 @@ describe("Pagination", () => {
         describe("getPageWindow()", () => {
             describe("Symmetrical / odd page window size", () => {
                 it("should not move for first items", () => {
-                    const paginator1 = Paginator.create({
+                    const paginator = Paginator.create({
                         totalItems: 100,
                         pageSize: 10,
                         currentPage: 1,
                         pageWindowSize: 5
                     });
-                    const paginator2 = Paginator.create({
-                        totalItems: 100,
-                        pageSize: 10,
-                        currentPage: 2,
-                        pageWindowSize: 5
-                    });
-                    const paginator3 = Paginator.create({
-                        totalItems: 100,
-                        pageSize: 10,
-                        currentPage: 3,
-                        pageWindowSize: 5
-                    });
 
-                    expect(paginator1.getPageWindow()).toEqual([1, 2, 3, 4, 5]);
-                    expect(paginator2.getPageWindow()).toEqual([1, 2, 3, 4, 5]);
-                    expect(paginator3.getPageWindow()).toEqual([1, 2, 3, 4, 5]);
+                    expect(paginator.getPageWindow()).toEqual([1, 2, 3, 4, 5]);
+                    paginator.nextPage();
+                    expect(paginator.getPageWindow()).toEqual([1, 2, 3, 4, 5]);
+                    paginator.nextPage();
+                    expect(paginator.getPageWindow()).toEqual([1, 2, 3, 4, 5]);
                 });
 
                 it("should move after first items", () => {
-                    const paginator4 = Paginator.create({
+                    const paginator = Paginator.create({
                         totalItems: 100,
                         pageSize: 10,
                         currentPage: 4,
                         pageWindowSize: 5
                     });
-                    const paginator5 = Paginator.create({
-                        totalItems: 100,
-                        pageSize: 10,
-                        currentPage: 5,
-                        pageWindowSize: 5
-                    });
-                    const paginator6 = Paginator.create({
-                        totalItems: 100,
-                        pageSize: 10,
-                        currentPage: 6,
-                        pageWindowSize: 5
-                    });
-                    const paginator7 = Paginator.create({
-                        totalItems: 100,
-                        pageSize: 10,
-                        currentPage: 7,
-                        pageWindowSize: 5
-                    });
 
-                    expect(paginator4.getPageWindow()).toEqual([2, 3, 4, 5, 6]);
-                    expect(paginator5.getPageWindow()).toEqual([3, 4, 5, 6, 7]);
-                    expect(paginator6.getPageWindow()).toEqual([4, 5, 6, 7, 8]);
-                    expect(paginator7.getPageWindow()).toEqual([5, 6, 7, 8, 9]);
+                    expect(paginator.getPageWindow()).toEqual([2, 3, 4, 5, 6]);
+                    paginator.nextPage();
+                    expect(paginator.getPageWindow()).toEqual([3, 4, 5, 6, 7]);
+                    paginator.nextPage();
+                    expect(paginator.getPageWindow()).toEqual([4, 5, 6, 7, 8]);
+                    paginator.nextPage();
+                    expect(paginator.getPageWindow()).toEqual([5, 6, 7, 8, 9]);
                 });
 
                 it("should not move after last items", () => {
-                    const paginator8 = Paginator.create({
+                    const paginator = Paginator.create({
                         totalItems: 100,
                         pageSize: 10,
                         currentPage: 8,
                         pageWindowSize: 5
                     });
-                    const paginator9 = Paginator.create({
-                        totalItems: 100,
-                        pageSize: 10,
-                        currentPage: 9,
-                        pageWindowSize: 5
-                    });
-                    const paginator10 = Paginator.create({
-                        totalItems: 100,
-                        pageSize: 10,
-                        currentPage: 10,
-                        pageWindowSize: 5
-                    });
 
-                    expect(paginator8.getPageWindow()).toEqual([6, 7, 8, 9, 10]);
-                    expect(paginator9.getPageWindow()).toEqual([6, 7, 8, 9, 10]);
-                    expect(paginator10.getPageWindow()).toEqual([6, 7, 8, 9, 10]);
+                    expect(paginator.getPageWindow()).toEqual([6, 7, 8, 9, 10]);
+                    paginator.nextPage();
+                    expect(paginator.getPageWindow()).toEqual([6, 7, 8, 9, 10]);
+                    paginator.nextPage();
+                    expect(paginator.getPageWindow()).toEqual([6, 7, 8, 9, 10]);
                 });
             });
         });
 
         describe("setCurrentPage()", () => {
-            it("should ..", () => {
+            it("should increment page", () => {
                 const paginator1 = Paginator.create({
                     totalItems: 100,
                     pageSize: 10,
@@ -258,23 +223,163 @@ describe("Pagination", () => {
                 });
 
                 paginator1.setCurrentPage(2);
-
                 expect(paginator1.getCurrentPage()).toBe(2);
+            });
+
+            it("should not be bigger than pages count", () => {
+                const paginator1 = Paginator.create({
+                    totalItems: 100,
+                    pageSize: 10,
+                    currentPage: 10,
+                    pageWindowSize: 5
+                });
+
+                paginator1.setCurrentPage(12);
+                expect(paginator1.getCurrentPage()).toBe(10);
+            });
+
+            it("should not be smaller than 1", () => {
+                const paginator1 = Paginator.create({
+                    totalItems: 100,
+                    pageSize: 10,
+                    currentPage: 10,
+                    pageWindowSize: 5
+                });
+
+                paginator1.setCurrentPage(-1);
+                expect(paginator1.getCurrentPage()).toBe(1);
+            });
+        });
+
+        describe("setPageWindowSize()", () => {
+            it("should set page window size", () => {
+                const paginator1 = Paginator.create({
+                    totalItems: 100,
+                    pageSize: 10,
+                    currentPage: 1,
+                    pageWindowSize: 5
+                });
+
+                paginator1.setPageWindowSize(3);
+                expect(paginator1.getPageWindowSize()).toBe(3);
+            });
+
+            it("should not be smaller than 1", () => {
+                const paginator1 = Paginator.create({
+                    totalItems: 100,
+                    pageSize: 10,
+                    currentPage: 10,
+                    pageWindowSize: 5
+                });
+
+                paginator1.setCurrentPage(-1);
+                expect(paginator1.getCurrentPage()).toBe(1);
+            });
+        });
+
+        describe("setPageSize()", () => {
+            it("should set page size", () => {
+                const paginator1 = Paginator.create({
+                    totalItems: 100,
+                    pageSize: 10,
+                    currentPage: 1,
+                    pageWindowSize: 5
+                });
+
+                paginator1.setPageSize(5);
+                expect(paginator1.getPageSize()).toBe(5);
+            });
+
+            it("should not be smaller than 1", () => {
+                const paginator1 = Paginator.create({
+                    totalItems: 100,
+                    pageSize: 10,
+                    currentPage: 1,
+                    pageWindowSize: 5
+                });
+
+                paginator1.setPageSize(0);
+                expect(paginator1.getPageSize()).toBe(1);
+            });
+        });
+
+        describe("firstPage()", () => {
+            it("should go to first page", () => {
+                const paginator1 = Paginator.create({
+                    totalItems: 100,
+                    pageSize: 10,
+                    currentPage: 5,
+                });
+
+                expect(paginator1.getCurrentPage()).toBe(5);
+                paginator1.firstPage();
+                expect(paginator1.getCurrentPage()).toBe(1);
+            });
+        });
+
+        describe("lastPage()", () => {
+            it("should go to last page", () => {
+                const paginator1 = Paginator.create({
+                    totalItems: 100,
+                    pageSize: 10,
+                    currentPage: 5,
+                });
+
+                expect(paginator1.getCurrentPage()).toBe(5);
+                paginator1.lastPage();
+                expect(paginator1.getCurrentPage()).toBe(10);
             });
         });
 
         describe("nextPage()", () => {
-            it("should..", () => {
+            it("should increment page", () => {
                 const paginator1 = Paginator.create({
                     totalItems: 100,
                     pageSize: 10,
-                    currentPage: 3,
+                    currentPage: 1,
                     pageWindowSize: 5
                 });
 
-                expect(paginator1.getPageWindow()).toEqual([1, 2, 3, 4, 5]);
                 paginator1.nextPage();
-                expect(paginator1.getPageWindow()).toEqual([2, 3, 4, 5, 6]);
+                expect(paginator1.getCurrentPage()).toBe(2);
+            });
+
+            it("should not increment page if reached maximum count", () => {
+                const paginator1 = Paginator.create({
+                    totalItems: 100,
+                    pageSize: 10,
+                    currentPage: 10,
+                    pageWindowSize: 5
+                });
+
+                paginator1.nextPage();
+                expect(paginator1.getCurrentPage()).toBe(10);
+            });
+        });
+
+        describe("previousPage()", () => {
+            it("should decrement page", () => {
+                const paginator1 = Paginator.create({
+                    totalItems: 100,
+                    pageSize: 10,
+                    currentPage: 2,
+                    pageWindowSize: 5
+                });
+
+                paginator1.previousPage();
+                expect(paginator1.getCurrentPage()).toBe(1);
+            });
+
+            it("should not decrement page if reached minimum count", () => {
+                const paginator1 = Paginator.create({
+                    totalItems: 100,
+                    pageSize: 10,
+                    currentPage: 1,
+                    pageWindowSize: 5
+                });
+
+                paginator1.previousPage();
+                expect(paginator1.getCurrentPage()).toBe(1);
             });
         });
     });
