@@ -91,15 +91,26 @@ describe("Pagination", () => {
             });
 
             it("should provide one page", () => {
-                const paginator = Paginator.create({
-                    totalItems: 5,
+                const paginator0 = Paginator.create({
+                    totalItems: 0,
+                    pageSize: 10,
+                });
+                const paginator9 = Paginator.create({
+                    totalItems: 0,
+                    pageSize: 10,
+                });
+                const paginator10 = Paginator.create({
+                    totalItems: 0,
                     pageSize: 10,
                 });
 
-                expect(paginator.getPagesCount()).toEqual(1);
+                expect(paginator0.getPagesCount()).toEqual(1);
+                expect(paginator9.getPagesCount()).toEqual(1);
+                expect(paginator10.getPagesCount()).toEqual(1);
             });
         });
-        describe("getPagedWindow()", () => {
+
+        describe("getPageWindow()", () => {
             it("should provide..", () => {
                 const paginator = Paginator.create({
                     totalItems: 100,
