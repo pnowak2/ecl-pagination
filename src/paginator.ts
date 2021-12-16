@@ -5,11 +5,6 @@ export interface PaginatorConfig {
     pageWindowSize?: number;
 }
 
-export interface Page {
-    index: number;
-    isCurrent: boolean;
-}
-
 const DefaultConfig: PaginatorConfig = {
     totalItems: 10,
     pageSize: 10,
