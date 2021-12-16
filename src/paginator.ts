@@ -28,7 +28,7 @@ export class Paginator {
         if (config.pageSize <= 0) {
             throw new Error('page size must be bigger than zero');
         }
-        
+
         if (config.pageWindowSize <= 0) {
             throw new Error('page window size must be bigger than zero');
         }
@@ -59,7 +59,42 @@ export class Paginator {
     }
 
     getPageWindow(): Array<number> {
-        return [1, 2, 3, 4, 5];
+        const pageWindowSize = this.getPageWindowSize();
+        const pagesCount = this.getPagesCount();
+        const currentPage = this.getCurrentPage();
+        let truncatedPageWindowSize;
+        let leftPageWindowSize;
+        let rightPageWindowSize;
+        let startPage;
+        let endPage;
+
+        // should not be bigger than pages count
+        truncatedPageWindowSize = Math.min(...[this.getPageWindowSize(), this.getPagesCount()]);
+
+        if (truncatedPageWindowSize % 2 === 0) {
+            // nonsymetrical pager (...*....)
+            leftPageWindowSize = (truncatedPageWindowSize / 2) - 1;
+            rightPageWindowSize = leftPageWindowSize + 1;
+        } else {
+            // symmetrical pager (...*...)
+            leftPageWindowSize = rightPageWindowSize = Math.floor(pageWindowSize / 2);
+        }
+
+        if (currentPage <= leftPageWindowSize) {
+            // start
+            startPage = 1;
+            endPage = truncatedPageWindowSize;
+        } else if (currentPage > (pagesCount - rightPageWindowSize)) {
+            // end
+            startPage = pagesCount - truncatedPageWindowSize + 1;
+            endPage = pagesCount;
+        } else {
+            // middle
+            startPage = currentPage - leftPageWindowSize;
+            endPage = currentPage + rightPageWindowSize;
+        }
+
+        return this.range(startPage, endPage + 1);
     }
 
     getTotalItems(): number {
@@ -74,7 +109,19 @@ export class Paginator {
         return this.currentPage;
     }
 
-    getPageWindowindowSize(): number {
+    getPageWindowSize(): number {
         return this.pageWindowSize;
     }
+
+    private range(start: number, end: number, step: number = 1): Array<number> {
+        let output = [];
+        if (typeof end === 'undefined') {
+            end = start;
+            start = 0;
+        }
+        for (let i = start; i < end; i += step) {
+            output.push(i);
+        }
+        return output;
+    };
 }
