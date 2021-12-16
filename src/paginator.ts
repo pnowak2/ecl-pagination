@@ -5,6 +5,11 @@ export interface PaginatorConfig {
     pageWindowSize?: number;
 }
 
+export interface Page {
+    index: number;
+    isCurrent: boolean;
+}
+
 const DefaultConfig: PaginatorConfig = {
     totalItems: 10,
     pageSize: 10,
@@ -21,8 +26,12 @@ export class Paginator {
     }
 
     public static create(config: PaginatorConfig = DefaultConfig): Paginator {
-        if (config.totalItems && config.totalItems < 0) {
+        if (config.totalItems < 0) {
             throw new Error('total items cannot be negative');
+        }
+
+        if (config.pageSize <= 0) {
+            throw new Error('page size must be bigger than zero');
         }
 
         return new Paginator(
@@ -31,6 +40,10 @@ export class Paginator {
             config.currentPage,
             config.pageWindowSize
         );
+    }
+
+    getPageWindow(): Array<number> {
+        return [1, 2, 3, 4, 5];
     }
 
     getTotalItems(): number {
