@@ -1,26 +1,26 @@
-export interface PaginatorConfig {
+export interface EuiPaginationConfig {
     totalItems?: number;
     pageSize?: number;
     currentPage?: number;
     pageWindowSize?: number;
 }
 
-const DefaultConfig: PaginatorConfig = {
+export const DefaultConfig: EuiPaginationConfig = {
     totalItems: 0,
     pageSize: 10,
     currentPage: 1,
     pageWindowSize: 5
 }
 
-export class Paginator {
+export class EuiPagination {
     private constructor(
-        private totalItems: number = 10,
-        private pageSize: number = 10,
-        private currentPage: number = 1,
-        private pageWindowSize: number = 5) {
+        private totalItems: number = DefaultConfig.totalItems,
+        private pageSize: number = DefaultConfig.pageSize,
+        private currentPage: number = DefaultConfig.currentPage,
+        private pageWindowSize: number = DefaultConfig.pageWindowSize) {
     }
 
-    public static create(config: PaginatorConfig = DefaultConfig): Paginator {
+    public static create(config: EuiPaginationConfig = DefaultConfig): EuiPagination {
         if (config.totalItems < 0) {
             throw new Error('total items cannot be negative');
         }
@@ -33,7 +33,7 @@ export class Paginator {
             throw new Error('page window size must be bigger than zero');
         }
 
-        return new Paginator(
+        return new EuiPagination(
             config.totalItems,
             config.pageSize,
             config.currentPage,
@@ -103,36 +103,34 @@ export class Paginator {
             endPage = currentPage + rightPageWindowSize;
         }
 
-        return this.range(startPage, endPage + 1);
+        return range(startPage, endPage + 1);
     }
 
-    setCurrentPage(page: number): void {
-      var pagesCount, upperTrunc, truncated;
-
-      pagesCount = this.getPagesCount();
-      upperTrunc = Math.min(...[page, pagesCount]);
-      truncated = Math.max(...[upperTrunc, 1]);
-
-      this.currentPage = truncated;
-    }
-
-    firstPage(): void {
+    goToFirstPage(): void {
         this.setCurrentPage(1);
     }
 
-    lastPage(): void {
+    goToLastPage(): void {
         const lastPage = this.getPagesCount();
         this.setCurrentPage(lastPage);
     }
 
-    nextPage(): void {
+    goToNextPage(): void {
         const nextPage = this.getCurrentPage() + 1;
         this.setCurrentPage(nextPage);
     }
 
-    previousPage(): void {
+    goToPreviousPage(): void {
         const previousPage = this.getCurrentPage() - 1;
         this.setCurrentPage(previousPage);
+    }
+
+    isGoToPreviousPageEnabled(): boolean {
+        return this.getCurrentPage() > 1;
+    }
+
+    isGoToNextPageEnabled(): boolean {
+        return this.getCurrentPage() < this.getPagesCount();
     }
 
     getTotalItems(): number {
@@ -152,6 +150,16 @@ export class Paginator {
         return this.currentPage;
     }
 
+    setCurrentPage(page: number): void {
+        var pagesCount, upperTrunc, truncated;
+
+        pagesCount = this.getPagesCount();
+        upperTrunc = Math.min(...[page, pagesCount]);
+        truncated = Math.max(...[upperTrunc, 1]);
+
+        this.currentPage = truncated;
+    }
+
     getPageWindowSize(): number {
         return this.pageWindowSize;
     }
@@ -161,15 +169,41 @@ export class Paginator {
         this.pageWindowSize = truncated;
     }
 
-    private range(start: number, end: number, step: number = 1): Array<number> {
-        let output = [];
-        if (typeof end === 'undefined') {
-            end = start;
-            start = 0;
+    getShowingFrom(): number {
+        const startingIndex = (this.getCurrentPage() - 1) * this.getPageSize();
+        let startingPage = startingIndex + 1;
+
+        if (!this.hasItems()) {
+            startingPage = 0;
         }
-        for (let i = start; i < end; i += step) {
-            output.push(i);
+
+        return startingPage;
+    }
+
+    getShowingTo(): number {
+        const displayStartItem = this.getShowingFrom();
+        const pageSize = this.getPageSize();
+        const totalItems = this.getTotalItems();
+        let pageEnd: number;
+
+        if (!this.hasItems()) {
+            return 0;
         }
-        return output;
-    };
+
+        pageEnd = Math.min(...[displayStartItem + pageSize - 1, totalItems]);
+
+        return pageEnd;
+    }
+}
+
+export const range = (start: number, end?: number, step: number = 1): Array<number> => {
+    let output = [];
+    if (typeof end === 'undefined') {
+        end = start;
+        start = 0;
+    }
+    for (let i = start; i < end; i += step) {
+        output.push(i);
+    }
+    return output;
 }
